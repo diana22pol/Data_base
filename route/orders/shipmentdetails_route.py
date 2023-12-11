@@ -9,6 +9,7 @@ from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
 
 from t08_flask_mysql.app.my_project.auth.controller import shipmentdetails_controller
+from t08_flask_mysql.app.my_project.auth.dao import shipmentdetails_dao
 from t08_flask_mysql.app.my_project.auth.domain import ShipmentDetails
 
 shipmentdetails_bp = Blueprint('shipmentsdetails', __name__, url_prefix='/shipmentsdetails')
@@ -75,3 +76,8 @@ def delete_product(shipmentdetails_id: int) -> Response:
     """
     shipmentdetails_controller.delete(shipmentdetails_id)
     return make_response("ShipmentDetails deleted", HTTPStatus.OK)
+
+@shipmentdetails_bp.get('/max-quantity')
+def get_max_shipment_quantity() -> Response:
+    max_quantity = shipmentdetails_dao.get_max_shipment_quantity()
+    return make_response(jsonify({'max_quantity': max_quantity}), HTTPStatus.OK)
